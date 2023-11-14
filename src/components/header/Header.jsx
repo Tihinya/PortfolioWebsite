@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import "./header.css"
 import {
     HiOutlineHome,
@@ -12,14 +12,34 @@ import {
 } from "react-icons/hi"
 
 export default function Header() {
-    window.addEventListener("scroll", function () {
-        const header = document.querySelector(".header")
-        if (this.scrollY >= 80) header.classList.add("scroll-header")
-        else header.classList.remove("scroll-header")
-    })
-
-    const [Toggle, showMenu] = useState(false)
+    const [toggle, setToggle] = useState(false)
     const [activeNav, setActiveNav] = useState("#home")
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const header = document.querySelector(".header")
+            if (window.scrollY >= 80) {
+                header.classList.add("scroll-header")
+            }
+            header.classList.remove("scroll-header")
+        }
+
+        window.addEventListener("scroll", handleScroll)
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll)
+        }
+    }, [])
+
+    const NavLink = ({ href, icon, text }) => (
+        <a
+            href={href}
+            onClick={() => setActiveNav(href)}
+            className={`nav__link ${activeNav === href ? "active-link" : ""}`}>
+            {icon}
+            {text}
+        </a>
+    )
 
     return (
         <header className="header">
@@ -29,95 +49,65 @@ export default function Header() {
                     className="nav__logo">
                     TiHinya
                 </a>
-                <div className={Toggle ? "nav__menu show-menu" : "nav__menu"}>
+                <div className={`nav__menu ${toggle ? "show-menu" : ""}`}>
                     <ul className="nav__list grid">
                         <li className="nav__item">
-                            <a
+                            <NavLink
                                 href="#home"
-                                onClick={() => setActiveNav("#home")}
-                                className={
-                                    activeNav === "#home"
-                                        ? "nav__link active-link"
-                                        : "nav__link"
-                                }>
-                                <HiOutlineHome className="nav__icon" />
-                                Home
-                            </a>
+                                icon={<HiOutlineHome className="nav__icon" />}
+                                text="Home"
+                            />
                         </li>
                         <li className="nav__item">
-                            <a
+                            <NavLink
                                 href="#about"
-                                onClick={() => setActiveNav("#about")}
-                                className={
-                                    activeNav === "#about"
-                                        ? "nav__link active-link"
-                                        : "nav__link"
-                                }>
-                                <HiOutlineUser className="nav__icon" />
-                                About
-                            </a>
+                                icon={<HiOutlineUser className="nav__icon" />}
+                                text="About"
+                            />
                         </li>
                         <li className="nav__item">
-                            <a
+                            <NavLink
                                 href="#skills"
-                                onClick={() => setActiveNav("#skills")}
-                                className={
-                                    activeNav === "#skills"
-                                        ? "nav__link active-link"
-                                        : "nav__link"
-                                }>
-                                <HiOutlineBadgeCheck className="nav__icon" />
-                                Skills
-                            </a>
+                                icon={
+                                    <HiOutlineBadgeCheck className="nav__icon" />
+                                }
+                                text="Skills"
+                            />
                         </li>
                         <li className="nav__item">
-                            <a
+                            <NavLink
                                 href="#services"
-                                onClick={() => setActiveNav("#services")}
-                                className={
-                                    activeNav === "#services"
-                                        ? "nav__link active-link"
-                                        : "nav__link"
-                                }>
-                                <HiOutlineClipboardList className="nav__icon" />
-                                Services
-                            </a>
+                                icon={
+                                    <HiOutlineClipboardList className="nav__icon" />
+                                }
+                                text="Services"
+                            />
                         </li>
                         <li className="nav__item">
-                            <a
+                            <NavLink
                                 href="#portfolio"
-                                onClick={() => setActiveNav("#portfolio")}
-                                className={
-                                    activeNav === "#portfolio"
-                                        ? "nav__link active-link"
-                                        : "nav__link"
-                                }>
-                                <HiOutlinePhotograph className="nav__icon" />
-                                Projects
-                            </a>
+                                icon={
+                                    <HiOutlinePhotograph className="nav__icon" />
+                                }
+                                text="Projects"
+                            />
                         </li>
                         <li className="nav__item">
-                            <a
+                            <NavLink
                                 href="#contact"
-                                onClick={() => setActiveNav("#contact")}
-                                className={
-                                    activeNav === "#contact"
-                                        ? "nav__link active-link"
-                                        : "nav__link"
-                                }>
-                                <HiOutlineMail className="nav__icon" />
-                                Contact
-                            </a>
+                                icon={<HiOutlineMail className="nav__icon" />}
+                                text="Contact"
+                            />
                         </li>
                     </ul>
                     <HiX
                         className="nav__close"
-                        onClick={() => showMenu(!Toggle)}
+                        onClick={() => setToggle(!toggle)}
                     />
                 </div>
                 <div
                     className="nav__toggle"
-                    onClick={() => showMenu(!Toggle)}>
+                    onClick={() => setToggle(!toggle)}>
                     <HiOutlineMenu />
                 </div>
             </nav>

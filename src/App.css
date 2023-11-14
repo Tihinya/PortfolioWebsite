@@ -104,9 +104,11 @@ img {
 
 /* LAYOUT */
 .container {
-  max-width: 968px;
+  max-width: 993px;
   margin-left: auto;
   margin-right: auto;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 
 .grid {
